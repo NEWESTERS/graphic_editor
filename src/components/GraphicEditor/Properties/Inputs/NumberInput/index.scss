@@ -1,0 +1,32 @@
+@import '../../../../../vars';
+
+.number-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    margin-top: 10px;
+
+    button {
+        background: none;
+        border: none;
+        font-size: 1.3em;
+        color: $text-color;
+        height: 25px;
+        width: 25px;
+        cursor: pointer;
+
+        &.decrement::after {
+            content: "-";
+        }
+
+        &.increment::after {
+            content: "+";
+        }
+    }
+
+    input {
+        width: 40px;
+    }
+}

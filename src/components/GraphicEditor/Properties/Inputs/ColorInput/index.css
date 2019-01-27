@@ -1,0 +1,15 @@
+.color-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  margin-top: 10px; }
+  .color-input input {
+    width: 60px;
+    padding-left: 15px; }
+  .color-input::after {
+    opacity: .5;
+    position: absolute;
+    content: "#";
+    transform: translateX(-30px); }

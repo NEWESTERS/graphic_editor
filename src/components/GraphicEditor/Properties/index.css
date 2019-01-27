@@ -1,0 +1,28 @@
+.properties-list {
+  padding: 25px;
+  background-color: #3d3d3d;
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .properties-list .property {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 50px; }
+    .properties-list .property label {
+      width: 150px;
+      text-align: center; }
+  .properties-list .delete {
+    background: none;
+    border: none;
+    height: 30px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #e34f40;
+    cursor: pointer;
+    font-size: .8em;
+    transition: all .3s ease; }
+    .properties-list .delete:hover {
+      background-color: #e34f40;
+      color: #3d3d3d; }

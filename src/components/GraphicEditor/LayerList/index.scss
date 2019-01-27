@@ -1,0 +1,44 @@
+@import '../../../vars';
+
+.layer-list {
+    padding: 25px;
+    background-color: $menu-secondary;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .layer {
+        height: 30px;
+        padding: 5px 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 10px;
+        @include transition;
+
+        &.add {
+            background: none;
+            color: $text-color;
+            border: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        .color {
+            height: 25px;
+            width: 25px;
+            border-radius: 8px;
+        }
+
+        &:hover {
+            background-color: $menu-main;
+        }
+
+        &.selected {
+            background-color: $menu-selection;
+        }
+    }
+}

@@ -1,0 +1,5 @@
+.viewport {
+  border: solid 1px black;
+  background-color: #EEE; }
+  .viewport.layer-selected {
+    cursor: move; }

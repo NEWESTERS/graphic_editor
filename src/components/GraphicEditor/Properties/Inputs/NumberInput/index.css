@@ -1,0 +1,21 @@
+.number-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  margin-top: 10px; }
+  .number-input button {
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    color: #eee;
+    height: 25px;
+    width: 25px;
+    cursor: pointer; }
+    .number-input button.decrement::after {
+      content: "-"; }
+    .number-input button.increment::after {
+      content: "+"; }
+  .number-input input {
+    width: 40px; }

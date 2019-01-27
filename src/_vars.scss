@@ -1,0 +1,12 @@
+$bg-main: rgb(43, 43, 43);
+$menu-main: rgb(61, 61, 61);
+$menu-secondary: rgb(53, 53, 53);
+$menu-selection: rgb(61, 97, 150);
+$text-color: #eee;
+$input-color: rgb(70, 70, 70);
+$border-color: rgb(84, 84, 84);
+$red-color: rgb(227, 79, 64);
+
+@mixin transition {
+    transition: all .3s ease;
+}

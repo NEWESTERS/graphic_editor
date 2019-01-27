@@ -1,0 +1,11 @@
+@import '../../../../vars';
+
+.property-input {
+    height: 25px;
+    font-size: 1em;
+    padding-left: 5px;
+    background-color: $input-color;
+    color: $text-color;
+    border: solid 1px $border-color;
+    border-radius: 5px;
+}
