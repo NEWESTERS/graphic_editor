@@ -55,9 +55,9 @@ export default class GraphicEditor extends React.Component<{}, IState> {
     }
 
     handleBlockSelect = (index: number) => {
-        this.setState({
-            selectedBlockId: index
-        })
+        this.setState((prevState: IState) => ({
+            selectedBlockId: prevState.selectedBlockId !== index ? index : undefined
+        }))
     }
 
     handleAddLayerClick = () => {

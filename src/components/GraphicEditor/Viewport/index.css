@@ -1,5 +1,12 @@
 .viewport {
   border: solid 1px black;
-  background-color: #EEE; }
+  position: relative; }
   .viewport.layer-selected {
     cursor: move; }
+  .viewport canvas {
+    position: absolute; }
+    .viewport canvas.main {
+      background-color: #EEE;
+      z-index: 0; }
+    .viewport canvas.drag {
+      z-index: 1; }

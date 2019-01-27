@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { IBlock } from '../types';
+import { drawBlock, drawSelection } from './drawer';
 import './index.css';
 
 interface IProps {
@@ -17,6 +18,12 @@ interface IState {
 
 export default class Viewport extends React.Component<IProps, IState> {
     private mainContext: CanvasRenderingContext2D;
+    private dragContext: CanvasRenderingContext2D;
+
+    contextsInit = (ref: HTMLCanvasElement) => {
+        !this.mainContext && (this.mainContext = ref.getContext("2d")!);
+        !this.dragContext && (this.dragContext = ref.getContext("2d")!);
+    }
 
     public state = {
         isDragging: false
@@ -27,25 +34,43 @@ export default class Viewport extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate() {
-        this.redraw();
+        const { isDragging } = this.state;
+
+        if(isDragging) {
+            this.drawDragging();
+        } else {
+            this.redraw();
+        }
     }
 
     redraw = () => {
-        const { blocks, width, height } = this.props;
+        const { blocks, width, height, selectedBlockId } = this.props;
 
-        this.mainContext.clearRect(0, 0, width, height)
-        blocks.map((block: IBlock) => {
-            this.mainContext.beginPath()
-            this.mainContext.rect(
-                block.x - block.width / 2,
-                block.y - block.height / 2,
-                block.width,
-                block.height
+        this.mainContext.clearRect(0, 0, width, height);
+        blocks.map((block: IBlock, index: number) => {
+            drawBlock(
+                this.mainContext,
+                block,
+                index === selectedBlockId
             );
-            this.mainContext.fillStyle = block.color;
-            this.mainContext.fill();
-            this.mainContext.closePath();
         });
+
+        selectedBlockId !== undefined && drawSelection(
+            this.mainContext,
+            blocks[selectedBlockId],
+        )
+    }
+
+    drawDragging = () => {
+        const { blocks, width, height, selectedBlockId } = this.props;
+
+        this.dragContext.clearRect(0, 0, width, height)
+        drawBlock(
+            this.dragContext,
+            blocks[selectedBlockId!],
+            true,
+            true
+        );
     }
 
     handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -60,8 +85,8 @@ export default class Viewport extends React.Component<IProps, IState> {
         if(this.state.isDragging) {
             const movedBlock = { ...this.props.blocks[this.props.selectedBlockId!] }
 
-            movedBlock.x += e.movementX;
-            movedBlock.y += e.movementY;
+            movedBlock.x = e.nativeEvent.layerX;
+            movedBlock.y = e.nativeEvent.layerY;
 
             this.props.onMove(movedBlock);
         }
@@ -69,6 +94,9 @@ export default class Viewport extends React.Component<IProps, IState> {
 
     handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
         if(this.state.isDragging) {
+            const { width, height } = this.props;
+            this.dragContext.clearRect(0, 0, width, height);
+
             this.setState({
                 isDragging: false
             })
@@ -79,16 +107,32 @@ export default class Viewport extends React.Component<IProps, IState> {
         const { width, height } = this.props;
 
         return(
-            <canvas
+            <div
                 className={ `viewport${ this.props.selectedBlockId !== undefined ? " layer-selected" : "" }` }
                 style={ { width: `${width}px`, height: `${height}px` } }
-                ref={ (ref: HTMLCanvasElement) => !this.mainContext && (this.mainContext = ref.getContext("2d")!) }
-                width={ width }
-                height={ height }
-                onMouseDown={ this.handleMouseDown }
-                onMouseMove={ this.handleMouseMove }
-                onMouseUp={ this.handleMouseUp }
-            />
+            >
+                <canvas
+                    className="main"
+                    style={ { width: `${width}px`, height: `${height}px` } }
+                    ref={ (ref: HTMLCanvasElement) => !this.mainContext && (this.mainContext = ref.getContext("2d")!) }
+                    width={ width }
+                    height={ height }
+                    onMouseDown={ this.handleMouseDown }
+                    onMouseMove={ this.handleMouseMove }
+                    onMouseUp={ this.handleMouseUp }
+                />
+
+                <canvas
+                    className="drag"
+                    style={ { width: `${width}px`, height: `${height}px` } }
+                    ref={ (ref: HTMLCanvasElement) => !this.dragContext && (this.dragContext = ref.getContext("2d")!) }
+                    width={ width }
+                    height={ height }
+                    onMouseDown={ this.handleMouseDown }
+                    onMouseMove={ this.handleMouseMove }
+                    onMouseUp={ this.handleMouseUp }
+                />
+            </div>
         )
     }
 }
