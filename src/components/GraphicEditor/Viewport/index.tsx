@@ -51,13 +51,13 @@ export default class Viewport extends React.Component<IProps, IState> {
             drawBlock(
                 this.mainContext,
                 block,
-                index === selectedBlockId
+                block.id === selectedBlockId
             );
         });
 
         selectedBlockId !== undefined && drawSelection(
             this.mainContext,
-            blocks[selectedBlockId],
+            blocks.find(block => block.id === selectedBlockId)!,
         )
     }
 
@@ -67,7 +67,7 @@ export default class Viewport extends React.Component<IProps, IState> {
         this.dragContext.clearRect(0, 0, width, height)
         drawBlock(
             this.dragContext,
-            blocks[selectedBlockId!],
+            blocks.find(block => block.id === selectedBlockId)!,
             true,
             true
         );
@@ -82,8 +82,10 @@ export default class Viewport extends React.Component<IProps, IState> {
     }
 
     handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const { blocks, selectedBlockId } = this.props;
+
         if(this.state.isDragging) {
-            const movedBlock = { ...this.props.blocks[this.props.selectedBlockId!] }
+            const movedBlock = { ...blocks.find(block => block.id === selectedBlockId)! }
 
             movedBlock.x = e.nativeEvent.layerX;
             movedBlock.y = e.nativeEvent.layerY;

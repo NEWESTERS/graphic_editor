@@ -19,21 +19,27 @@ interface IState {
 export default class GraphicEditor extends React.Component<{}, IState> {
     public state = {
         blocks: [
-            {
+            {   
+                id: (new Date()).getMilliseconds(),
+                name: "Слой 1",
                 x: 100,
                 y: 200,
                 width: 50,
                 height: 100,
                 color: "#77FF77"
             },
-            {
+            {   
+                id: (new Date()).getMilliseconds() + 1,
+                name: "Слой 2",
                 x: 300,
                 y: 250,
                 width: 250,
                 height: 75,
                 color: "#FF7777"
             },
-            {
+            {   
+                id: (new Date()).getMilliseconds() + 2,
+                name: "Слой 3",
                 x: 550,
                 y: 400,
                 width: 150,
@@ -47,22 +53,24 @@ export default class GraphicEditor extends React.Component<{}, IState> {
         const blocks = [ ...this.state.blocks ],
             { selectedBlockId } = this.state;
 
-        blocks[selectedBlockId!] = block;
+        blocks[blocks.findIndex(block => block.id === selectedBlockId)!] = block;
 
         this.setState({
             blocks: blocks
         })
     }
 
-    handleBlockSelect = (index: number) => {
+    handleBlockSelect = (id: number) => {
         this.setState((prevState: IState) => ({
-            selectedBlockId: prevState.selectedBlockId !== index ? index : undefined
+            selectedBlockId: prevState.selectedBlockId !== id ? id : undefined
         }))
     }
 
     handleAddLayerClick = () => {
         const { blocks } = this.state,
             block: IBlock = {
+                id: (new Date()).getMilliseconds(),
+                name: `Слой ${ blocks.length + 1 }`,
                 x: VIEWPORT_WIDTH / 2,
                 y: VIEWPORT_HEIGHT / 2,
                 width: 100,
@@ -72,16 +80,15 @@ export default class GraphicEditor extends React.Component<{}, IState> {
 
         this.setState({
             blocks: [ ...blocks, block ],
-            selectedBlockId: blocks.length
+            selectedBlockId: block.id
         })
-
-        console.log("ADD")
     }
 
     handleDeleteLayerClick = () => {
-        const blocks = [ ...this.state.blocks ];
+        const blocks = [ ...this.state.blocks ],
+            selectectedBlockIndex = blocks.findIndex(block => block.id === this.state.selectedBlockId);
 
-        blocks.splice(this.state.selectedBlockId!, 1);
+        blocks.splice(selectectedBlockIndex, 1);
 
         this.setState({
             blocks: blocks,
@@ -91,8 +98,6 @@ export default class GraphicEditor extends React.Component<{}, IState> {
 
     handleKeyPress = (e: React.KeyboardEvent) => {
         const { selectedBlockId } = this.state;
-
-        console.log("KEY");
 
         if(selectedBlockId === undefined) return;
 
@@ -152,10 +157,11 @@ export default class GraphicEditor extends React.Component<{}, IState> {
                         blocks={ blocks }
                         onSelect={ this.handleBlockSelect }
                         onAdd={ this.handleAddLayerClick }
+                        onReorder={ (blocks) => this.setState({ blocks: blocks }) }
                     />
 
                     <Properties
-                        block={ selectedBlockId !== undefined ? blocks[selectedBlockId] : undefined }
+                        block={ blocks.find(block => block.id === selectedBlockId) }
                         onChange={ this.handleBlockChange }
                         onDelete={ this.handleDeleteLayerClick }
                     />

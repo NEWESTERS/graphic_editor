@@ -94,7 +94,7 @@ export default class Properties extends React.Component<IProps> {
                 }
                     <button className="delete" onClick={ onDelete }>Удалить слой</button>
                 </React.Fragment> ||
-                <h4>Выберите блок</h4>
+                <h4>Выберите слой</h4>
             }
             </div>
         )

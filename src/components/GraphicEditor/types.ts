@@ -1,4 +1,6 @@
 export interface IBlock {
+    id: number,
+    name: string,
     x: number;
     y: number;
     width: number;
